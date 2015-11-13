@@ -1,7 +1,8 @@
-﻿#  Wzorowane na przykładzie Rona Zacharskiego
+#  Wzorowane na przykładzie Rona Zacharskiego
 #
 
 from math import sqrt
+from numpy import corrcoef
 
 users = {
         "Ania": 
@@ -48,11 +49,43 @@ def manhattan(rating1, rating2):
         return -1
 
 def pearson(rating1, rating2):
+    klucze1 = users[rating1].keys()    
+    klucze2 = users[rating2].keys()
     korelacja=0
-    
+    x=0
+    y=0
+    suma_x=0
+    suma_y=0
+    iloczyn_sumy=0
+    suma_iloczynow=0
+    korelacja_licz=0
+    korelacja_mian=0
+    n=0
+    for key in klucze1:
+        for key1 in klucze2:
+            if key ==key1:
+                n=n+1
+                x=users[rating1][key]
+                y=users[rating2][key1]
+                suma_x=suma_x+x
+                suma_y=suma_y+y 
+            iloczyn_sumy=suma_x*suma_y
+            suma_iloczynow=suma_iloczynow+(x*y)
+    korelacja_licz=korelacja_licz+suma_iloczynow-(iloczyn_sumy/n)
+    korelacja_mian=(sqrt(suma_x**2-(suma_x**2/n)))*(sqrt(suma_y**2-(suma_y**2/n)))
+    korelacja=korelacja_licz/korelacja_mian
     return korelacja
 
 def pearsonNumpy(rating1, rating2):
-    
     korelacja=0
+    klucze1 = users[rating1].keys()    
+    klucze2 = users[rating2].keys()
+    x=[]
+    y=[]
+    for key in klucze1:
+        for key1 in klucze2:
+            if key==key1:
+                x.append(users[rating1][key])
+                y.append(users[rating2][key1])
+    korelacja=corrcoef([x,y])[1,0]
     return korelacja
